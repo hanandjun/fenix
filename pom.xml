@@ -42,7 +42,7 @@
     </properties>
 
     <dependencies>
-        <!-- 以下是一些须要调用方自己提供而不用传递依赖下去的包. -->
+        <!-- 以下是一些需要调用方自己提供而不用传递依赖下去的包. -->
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
@@ -68,23 +68,11 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- 由于下面两个依赖在 Spring Data JPA 的 2.6.0 版本中被移除了，但 fenix 使用到了这两个。
-            为了保持向前兼容，在 Fenix 的 2.6.0 版本中添加了这两个依赖项，后续 3.0 大版本时才会考虑是否移除。 -->
+        <!-- 在 Spring Data JPA 的 2.6.0 版本中被移除了,但 fenix 使用到了.后续考虑是否移除. -->
         <dependency>
             <groupId>org.dom4j</groupId>
             <artifactId>dom4j</artifactId>
             <version>2.1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>3.30.2-GA</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>xml-apis</artifactId>
-                    <groupId>xml-apis</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- 以下是编译运行所需的依赖包. -->
