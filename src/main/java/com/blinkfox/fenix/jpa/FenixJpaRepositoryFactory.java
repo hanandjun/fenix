@@ -1,14 +1,15 @@
 package com.blinkfox.fenix.jpa;
 
 import jakarta.persistence.EntityManager;
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.provider.PersistenceProvider;
 import org.springframework.data.jpa.provider.QueryExtractor;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.query.QueryLookupStrategy;
-import org.springframework.data.repository.query.QueryMethodEvaluationContextProvider;
+import org.springframework.data.repository.query.ValueExpressionDelegate;
+
+import java.util.Optional;
 
 /**
  * 扩展了 {@link JpaRepositoryFactory} JPA 规范类的 的 Repository 工厂类.
@@ -40,22 +41,11 @@ public class FenixJpaRepositoryFactory extends JpaRepositoryFactory {
         super(entityManager);
         this.entityManager = entityManager;
         this.extractor = PersistenceProvider.fromEntityManager(entityManager);
-
-        // 为了兼容 Spring Data JPA v2.3.0 之前的版本，这里修改 class 中的字节码，来支持老版本中 JPA 的相关方法，防止编译报错.
-        FenixJpaClassWriter.modify();
     }
 
-    /**
-     * 创建 {@link QueryLookupStrategy} 实例.
-     *
-     * @param key QueryLookupStrategy 的策略 Key
-     * @param provider QueryMethodEvaluationContextProvider 实例
-     * @return FenixQueryLookupStrategy 实例
-     */
     @Override
-    protected Optional<QueryLookupStrategy> getQueryLookupStrategy(QueryLookupStrategy.Key key,
-            QueryMethodEvaluationContextProvider provider) {
-        return Optional.of(FenixQueryLookupStrategy.create(entityManager, key, this.extractor, provider));
+    protected Optional<QueryLookupStrategy> getQueryLookupStrategy(QueryLookupStrategy.Key key, ValueExpressionDelegate valueExpressionDelegate) {
+        return Optional.of(FenixQueryLookupStrategy.create(entityManager, key, valueExpressionDelegate, this.extractor));
     }
 
     /**
